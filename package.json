@@ -1,0 +1,20 @@
+{
+    "name": "adoralytics",
+    "version": "1.0.0",
+    "description": "javascript client to adoralytics ",
+    "main": "index.js",
+    "scripts": {
+        "test": "jest"
+    },
+    "author": "",
+    "license": "MIT",
+    "devDependencies": {
+        "babel-cli": "^6.26.0",
+        "eslint": "^4.6.1",
+        "jest": "^21.0.1"
+    },
+    "jest": {
+        "collectCoverage": true,
+        "collectCoverageFrom": ["./lib"]
+    }
+}
