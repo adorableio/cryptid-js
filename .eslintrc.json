@@ -3,14 +3,20 @@
         "browser": true,
         "commonjs": true,
         "es6": true,
-        "node": true
+        "node": true,
+        "jest/globals": true
     },
     "parserOptions": {
+        "ecmaVersion": 6,
         "ecmaFeatures": {
-            "jsx": true
+            "experimentalObjectRestSpread": true
         },
         "sourceType": "module"
     },
+    "plugins": [
+        "prefer-object-spread",
+        "jest"
+    ],
     "rules": {
         "no-const-assign": "warn",
         "no-this-before-super": "warn",
@@ -18,6 +24,11 @@
         "no-unreachable": "warn",
         "no-unused-vars": "warn",
         "constructor-super": "warn",
-        "valid-typeof": "warn"
+        "valid-typeof": "warn",
+        "prefer-object-spread/prefer-object-spread": 2,
+        "jest/no-disabled-tests": "warn",
+        "jest/no-focused-tests": "warn",
+        "jest/no-identical-title": "warn",
+        "jest/valid-expect": "error"
     }
 }

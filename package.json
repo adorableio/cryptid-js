@@ -1,20 +1,38 @@
 {
-    "name": "adoralytics",
-    "version": "1.0.0",
+    "name": "cryptid",
+    "version": "0.0.1",
     "description": "javascript client to adoralytics ",
-    "main": "index.js",
+    "website": "https://cryptid.adorable.io",
+    "main": "dist/index.js",
     "scripts": {
+        "build": "$(npm bin)/babel src/ --ignore src/__mocks__ -d dist --copy-files",
+        "watch": "$(npm bin)/babel src/ --ignore src/__mocks__ -d dist --copy-files --watch",
+        "prepublish": "npm run build",
         "test": "jest"
     },
-    "author": "",
+    "repository": "adorableio/cryptid-js",
+    "author": "Zachery Moneypenny <zachery@adorable.io>",
+    "bugs": {
+        "url": "https://github.com/adorableio/cryptid-js/issues",
+        "email": "hello@adorable.io"
+    },
     "license": "MIT",
     "devDependencies": {
         "babel-cli": "^6.26.0",
+        "babel-plugin-transform-object-rest-spread": "^6.26.0",
+        "babel-preset-env": "^1.6.0",
         "eslint": "^4.6.1",
+        "eslint-plugin-jest": "^21.0.0",
+        "eslint-plugin-prefer-object-spread": "^1.2.1",
         "jest": "^21.0.1"
     },
     "jest": {
         "collectCoverage": true,
-        "collectCoverageFrom": ["./lib"]
+        "collectCoverageFrom": [
+            "./src"
+        ]
+    },
+    "dependencies": {
+        "reqwest": "^2.0.5"
     }
 }
