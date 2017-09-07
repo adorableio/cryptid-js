@@ -29,7 +29,9 @@
   "jest": {
     "collectCoverage": true,
     "collectCoverageFrom": [
-      "./src"
+      "**/src/**",
+      "!**/src/__mocks__/**",
+      "!**/src/browser.js"
     ]
   },
   "dependencies": {
