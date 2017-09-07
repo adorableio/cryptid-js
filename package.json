@@ -7,7 +7,7 @@
   "scripts": {
     "build": "$(npm bin)/babel src/ --ignore src/__mocks__ -d dist --copy-files",
     "watch": "$(npm bin)/babel src/ --ignore src/__mocks__ -d dist --copy-files --watch",
-    "prepublish": "npm run build",
+    "prepare": "npm run build",
     "test": "jest"
   },
   "repository": "adorableio/cryptid-js",
