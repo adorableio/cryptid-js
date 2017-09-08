@@ -23,7 +23,11 @@ function Tracker(trackerId, options) {
 
 Tracker.prototype.send = function(event) {
   const metadata = collectBrowserMetadata();
-  let mergedEvent = {...metadata, ...event };
+  let mergedEvent = {
+    trackerId: this.trackerId,
+    ...metadata,
+    ...event
+  };
   const config = generateRequestOptions();
   let mergedConfig = {...config, ...this.options };
   sendData(mergedEvent, mergedConfig);
