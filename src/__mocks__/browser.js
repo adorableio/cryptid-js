@@ -1,14 +1,14 @@
 export default function collectBrowserMetadata() {
   return {
-    document_location_url: "http://example.org/hello/world.html",
-    document_referer: "http://google.com",
-    document_encoding: "utf-8",
-    document_title: "Hello World!",
-    document_hostname: "example.org",
-    document_path: "/hello/world.html",
-    user_language: "en-US",
-    screen_resolution: "4000x3000",
-    viewport_size: "800x600",
-    screen_colors: "32",
+    documentLocationUrl: "http://example.org/hello/world.html",
+    documentReferer: "http://google.com",
+    documentEncoding: "utf-8",
+    documentTitle: "Hello World!",
+    documentHostname: "example.org",
+    documentPath: "/hello/world.html",
+    userLanguage: "en-US",
+    screenResolution: "4000x3000",
+    viewportSize: "800x600",
+    screenColors: "24",
   };
 };
