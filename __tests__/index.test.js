@@ -29,11 +29,13 @@ describe('#track', () => {
   it('merges supplied event data with browser metadata', () => {
     tracker.send(event);
     expect(tracker.reqwest).toBeCalledWith(expect.objectContaining({
-      data: expect.objectContaining({
-        documentLocationUrl: "http://example.org/hello/world.html",
-        eventValue: "button-click",
-        userLanguage: "en-GB",
-      }),
+      data: {
+        event: expect.objectContaining({
+          documentLocationUrl: "http://example.org/hello/world.html",
+          eventValue: "button-click",
+          userLanguage: "en-GB",
+        })
+      }
     }));
   });
 
