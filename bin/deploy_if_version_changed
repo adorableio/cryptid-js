@@ -10,7 +10,7 @@ if [ -z `$(npm bin)/semver -r ">$repoVersion" $localVersion` ]; then
   echo "Local version is less than or equal to repository version. Will not deploy."
 else
   echo "Local version increments past repository version. Deploying."
-  `$(npm bin)/ci-publish`
+  $(npm bin)/ci-publish
 fi
 
 
