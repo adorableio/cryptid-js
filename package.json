@@ -25,7 +25,9 @@
     "eslint": "^4.6.1",
     "eslint-plugin-jest": "^21.0.0",
     "eslint-plugin-prefer-object-spread": "^1.2.1",
-    "jest": "^21.0.1"
+    "jest": "^21.0.1",
+    "jq2": "^1.0.1",
+    "semver": "^5.4.1"
   },
   "jest": {
     "collectCoverage": true,
