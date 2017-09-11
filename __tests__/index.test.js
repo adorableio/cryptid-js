@@ -23,16 +23,16 @@ describe('#track', () => {
     trackerId = "web|123456789";
     options = { url: "aspen.org", method: "get" };
     tracker = new Tracker(trackerId, options);
-    event = { event_value: 'button-click', user_language: "en-GB" };
+    event = { eventValue: 'button-click', userLanguage: "en-GB" };
   });
 
   it('merges supplied event data with browser metadata', () => {
     tracker.send(event);
     expect(tracker.reqwest).toBeCalledWith(expect.objectContaining({
       data: expect.objectContaining({
-        document_location_url: "http://example.org/hello/world.html",
-        event_value: "button-click",
-        user_language: "en-GB",
+        documentLocationUrl: "http://example.org/hello/world.html",
+        eventValue: "button-click",
+        userLanguage: "en-GB",
       }),
     }));
   });
