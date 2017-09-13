@@ -1,4 +1,8 @@
-import {fetchCurrentUser, getPreferences} from './cli';
+import {
+  fetchCurrentUser,
+  getPreferences,
+  getServer
+} from './cli';
 
 import Table from 'easy-table';
 import chalk from 'chalk';
@@ -11,6 +15,11 @@ if (prefs.needsLogin) {
 }
 
 fetchCurrentUser(prefs.account.token, (error, response, body) => {
+  if (error && error.code == 'ENOTFOUND') {
+    console.log(chalk.red(`Could not reach cryptid server. Is ${getServer()} reachable?`))
+    process.exit(1);
+  }
+
   if (response.statusCode === 200) {
     let t = new Table();
 
