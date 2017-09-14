@@ -60,3 +60,21 @@ export function fetchCurrentUser(token, callback) {
   };
   request(options, callback);
 }
+
+export function createAccount(accountName, callback) {
+  let url = buildUrl('/api/accounts');
+  let token = getPreferences().account.token;
+  let options = {
+    url: url,
+    method: 'post',
+    headers: {
+      'Authorization': `Token token=${token}`
+    },
+    json: {
+      account: {
+        name: accountName
+      }
+    }
+  };
+  request(options, callback);
+}
