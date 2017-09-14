@@ -78,3 +78,21 @@ export function createAccount(accountName, callback) {
   };
   request(options, callback);
 }
+
+export function updateAccount(accountId, accountName, callback) {
+  let url = buildUrl(`/api/accounts/${accountId}`);
+  let token = getPreferences().account.token;
+  let options = {
+    url: url,
+    method: 'put',
+    headers: {
+      'Authorization': `Token token=${token}`
+    },
+    json: {
+      account: {
+        name: accountName
+      }
+    }
+  };
+  request(options, callback);
+}
