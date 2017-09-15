@@ -96,3 +96,22 @@ export function updateAccount(accountId, accountName, callback) {
   };
   request(options, callback);
 }
+
+export function addUserToAccount(accountId, email, callback) {
+  let url = buildUrl(`/api/accounts/${accountId}/users`);
+  let token = getPreferences().account.token;
+  let options = {
+    url: url,
+    method: 'post',
+    headers: {
+      'Authorization': `Token token=${token}`
+    },
+    json: {
+      user: {
+        email: email
+      }
+    }
+  };
+  request(options, callback);
+
+}
