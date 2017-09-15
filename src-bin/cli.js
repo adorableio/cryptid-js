@@ -113,5 +113,24 @@ export function addUserToAccount(accountId, email, callback) {
     }
   };
   request(options, callback);
+}
+
+export function updatePassword(currentPassword, newPassword, callback) {
+  let url = buildUrl(`/api/users/current`);
+  let token = getPreferences().account.token;
+  let options = {
+    url: url,
+    method: 'put',
+    headers: {
+      'Authorization': `Token token=${token}`
+    },
+    json: {
+      user: {
+        password: newPassword,
+        password_confirmation: newPassword,
+      }
+    }
+  };
+  request(options, callback);
 
 }

@@ -8,6 +8,7 @@ program
   .version(version)
   .description('Admin interface to Cryptid Analytics')
   .command('login', 'Login to Cryptid')
+  .command('user', 'User actions')
   .command('accounts', 'Interact with accounts')
   .command('products', 'Interact with products')
   .command('properties', 'Interact with properties')

@@ -1,4 +1,4 @@
-import {getPreferences, updateAccount} from './cli';
+import {getPreferences, getServer, updateAccount} from './cli';
 
 import Table from 'easy-table';
 import chalk from 'chalk';
