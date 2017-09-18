@@ -1,15 +1,18 @@
 {
-    "presets": [
-        ["env", {
-            "targets": {
-                "browsers": ["last 2 versions", "> 5%"]
-            }
-        }]
-    ],
-    "plugins": [
-        "transform-object-rest-spread"
-    ],
-    "ignore": [
-        "node_modules/"
-    ]
+  "env": {
+    "lib": {
+      "ignore": [
+        "src/bin/"
+      ]
+    }
+  },
+  "presets": [
+    ["env", {
+      "targets": {"node": "6.0"},
+      "useBuiltIns": true
+    }]
+  ],
+  "plugins": [
+    "transform-object-rest-spread"
+  ]
 }

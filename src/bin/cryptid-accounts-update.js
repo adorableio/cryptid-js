@@ -16,12 +16,12 @@ if (prefs.needsLogin) {
   process.exit(1);
 }
 
-if(!program.accountName) {
+if (!program.accountName) {
   console.log(chalk.red('Account name is required (use -n <accountName>)'));
   process.exit(1);
 }
 
-if(!program.accountId) {
+if (!program.accountId) {
   console.log(chalk.red('Account id is required (use -a <accountId>)'));
   process.exit(1);
 }
