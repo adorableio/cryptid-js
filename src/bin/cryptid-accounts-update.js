@@ -7,7 +7,7 @@ import program from 'commander';
 program
   .option('-a, --account-id <accountId>', 'Id of account to update')
   .option('-n, --account-name <accountName>', 'Account name')
-  .parse(process.argv)
+  .parse(process.argv);
 
 let prefs = getPreferences();
 
@@ -28,7 +28,7 @@ if (!program.accountId) {
 
 updateAccount(program.accountId, program.accountName, (error, response, body) => {
   if (error && error.code == 'ENOTFOUND') {
-    console.log(chalk.red(`Could not reach cryptid server. Is ${getServer()} reachable?`))
+    console.log(chalk.red(`Could not reach cryptid server. Is ${getServer()} reachable?`));
     process.exit(1);
   }
 

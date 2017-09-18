@@ -2,7 +2,7 @@ import path from 'path';
 import program from 'commander';
 
 let version = require(path.join(__dirname, '../..', 'package.json'))
-                .version;
+  .version;
 
 program
   .version(version)

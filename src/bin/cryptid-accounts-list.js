@@ -16,7 +16,7 @@ if (prefs.needsLogin) {
 
 fetchCurrentUser(prefs.account.token, (error, response, body) => {
   if (error && error.code == 'ENOTFOUND') {
-    console.log(chalk.red(`Could not reach cryptid server. Is ${getServer()} reachable?`))
+    console.log(chalk.red(`Could not reach cryptid server. Is ${getServer()} reachable?`));
     process.exit(1);
   }
 

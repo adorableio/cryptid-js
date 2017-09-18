@@ -37,7 +37,7 @@ export function login(username, password) {
   };
   request(options, (error, response, body) => {
     if (response.statusCode == 201) {
-      let prefs = getPreferences()
+      let prefs = getPreferences();
       prefs.account.token = body.data.token;
       prefs.account.email = username;
 
@@ -52,10 +52,10 @@ export function fetchCurrentUser(token, callback) {
   let url = buildUrl('/api/users/current');
   let options = {
     url: url,
-    method: "get",
+    method: 'get',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Token token=${token}`
+      Authorization: `Token token=${token}`
     }
   };
   request(options, callback);
@@ -68,7 +68,7 @@ export function createAccount(accountName, callback) {
     url: url,
     method: 'post',
     headers: {
-      'Authorization': `Token token=${token}`
+      Authorization: `Token token=${token}`
     },
     json: {
       account: {
@@ -86,7 +86,7 @@ export function updateAccount(accountId, accountName, callback) {
     url: url,
     method: 'put',
     headers: {
-      'Authorization': `Token token=${token}`
+      Authorization: `Token token=${token}`
     },
     json: {
       account: {
@@ -104,7 +104,7 @@ export function addUserToAccount(accountId, email, callback) {
     url: url,
     method: 'post',
     headers: {
-      'Authorization': `Token token=${token}`
+      Authorization: `Token token=${token}`
     },
     json: {
       user: {
@@ -116,13 +116,13 @@ export function addUserToAccount(accountId, email, callback) {
 }
 
 export function updatePassword(currentPassword, newPassword, callback) {
-  let url = buildUrl(`/api/users/current`);
+  let url = buildUrl('/api/users/current');
   let token = getPreferences().account.token;
   let options = {
     url: url,
     method: 'put',
     headers: {
-      'Authorization': `Token token=${token}`
+      Authorization: `Token token=${token}`
     },
     json: {
       user: {

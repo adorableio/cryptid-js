@@ -18,7 +18,7 @@ if (prefs.account.token.length > 0 && prefs.account.email.length > 0) {
   process.exit();
 }
 
-if(username && password) {
+if (username && password) {
   login(username, password);
 } else {
   let questions = [];
@@ -32,7 +32,7 @@ if(username && password) {
     });
   }
 
-  if(!password) {
+  if (!password) {
     questions.push({
       type: 'password',
       name: 'password',

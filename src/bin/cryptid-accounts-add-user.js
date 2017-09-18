@@ -15,19 +15,19 @@ if (prefs.needsLogin) {
   process.exit(1);
 }
 
-if(!program.email) {
+if (!program.email) {
   console.log(chalk.red('Email is required (use -e <email>)'));
   process.exit(1);
 }
 
-if(!program.accountId) {
+if (!program.accountId) {
   console.log(chalk.red('Account id is required (use -a <accountId>)'));
   process.exit(1);
 }
 
 addUserToAccount(program.accountId, program.email, (error, response, body) => {
   if (error && error.code == 'ENOTFOUND') {
-    console.log(chalk.red(`Could not reach cryptid server. Is ${getServer()} reachable?`))
+    console.log(chalk.red(`Could not reach cryptid server. Is ${getServer()} reachable?`));
     process.exit(1);
   }
 

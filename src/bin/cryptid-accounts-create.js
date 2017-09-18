@@ -6,7 +6,7 @@ import program from 'commander';
 
 program
   .option('-n, --account-name <accountName>', 'Account name')
-  .parse(process.argv)
+  .parse(process.argv);
 
 
 let prefs = getPreferences();
@@ -16,14 +16,14 @@ if (prefs.needsLogin) {
   process.exit(1);
 }
 
-if(!program.accountName) {
+if (!program.accountName) {
   console.log(chalk.red('Account name is required (use -n <accountName>)'));
   process.exit(1);
 }
 
 createAccount(program.accountName, (error, response, body) => {
   if (error && error.code == 'ENOTFOUND') {
-    console.log(chalk.red(`Could not reach cryptid server. Is ${getServer()} reachable?`))
+    console.log(chalk.red(`Could not reach cryptid server. Is ${getServer()} reachable?`));
     process.exit(1);
   }
 
