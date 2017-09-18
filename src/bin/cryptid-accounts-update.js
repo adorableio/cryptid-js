@@ -1,4 +1,9 @@
-import {getPreferences, getServer, updateAccount} from './cli';
+import {
+  logger,
+  preferences,
+  server,
+  updateAccount
+} from './cli';
 
 import Table from 'easy-table';
 import chalk from 'chalk';
@@ -9,26 +14,24 @@ program
   .option('-n, --account-name <accountName>', 'Account name')
   .parse(process.argv);
 
-let prefs = getPreferences();
-
-if (prefs.needsLogin) {
-  console.log(chalk.red('You must first login with "cryptid login"'));
+if (preferences.needsLogin) {
+  logger.info(chalk.red('You must first login with "cryptid login"'));
   process.exit(1);
 }
 
 if (!program.accountName) {
-  console.log(chalk.red('Account name is required (use -n <accountName>)'));
+  logger.info(chalk.red('Account name is required (use -n <accountName>)'));
   process.exit(1);
 }
 
 if (!program.accountId) {
-  console.log(chalk.red('Account id is required (use -a <accountId>)'));
+  logger.info(chalk.red('Account id is required (use -a <accountId>)'));
   process.exit(1);
 }
 
 updateAccount(program.accountId, program.accountName, (error, response, body) => {
-  if (error && error.code == 'ENOTFOUND') {
-    console.log(chalk.red(`Could not reach cryptid server. Is ${getServer()} reachable?`));
+  if (error && error.code === 'ENOTFOUND') {
+    logger.info(chalk.red(`Could not reach cryptid server. Is ${server} reachable?`));
     process.exit(1);
   }
 
@@ -37,16 +40,16 @@ updateAccount(program.accountId, program.accountName, (error, response, body) =>
 
     let account = body.data;
 
-    console.log(chalk.green(`Updated account ${account.name}\n`));
+    logger.info(chalk.green(`Updated account ${account.name}\n`));
 
     t.cell('id', account.id);
     t.cell('account name', account.name);
     t.newRow();
 
-    console.log(t.toString());
+    logger.info(t.toString());
   } else {
-    console.log(response.statusCode);
-    console.log(chalk.red('Error updating account'));
+    logger.info(response.statusCode);
+    logger.info(chalk.red('Error updating account'));
     process.exit(1);
   }
 });

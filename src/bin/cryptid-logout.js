@@ -1,5 +1,4 @@
-import chalk from 'chalk';
-import {getPreferences} from './cli';
+import {preferences} from './cli';
 
-getPreferences().account = { token: '', email: '' };
+preferences.account = { token: '', email: '' };
 process.exit();

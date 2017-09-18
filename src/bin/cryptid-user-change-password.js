@@ -1,4 +1,9 @@
-import {getPreferences, getServer, updatePassword} from './cli';
+import {
+  logger,
+  preferences,
+  server,
+  updatePassword
+} from './cli';
 
 import chalk from 'chalk';
 import inquirer from 'inquirer';
@@ -13,11 +18,25 @@ program
 let currentPassword = program.currentPassword;
 let newPassword = program.newPassword;
 
-let prefs = getPreferences();
-
-if (prefs.needsLogin) {
-  console.log(chalk.red('You must first login with "cryptid login"'));
+if (preferences.needsLogin) {
+  logger.info(chalk.red('You must first login with "cryptid login"'));
   process.exit(1);
+}
+
+function callUpdatePassword(old, updated) {
+  updatePassword(old, updated, (error, response) => {
+    if (error && error.code === 'ENOTFOUND') {
+      logger.info(chalk.red(`Could not reach cryptid server. Is ${server} reachable?`));
+      process.exit(1);
+    }
+
+    if (response.statusCode === 200) {
+      logger.info(chalk.green('Your password has been updated'));
+    } else {
+      logger.info(response.statusCode);
+      logger.info(chalk.red('An error has occurred'));
+    }
+  });
 }
 
 if (currentPassword && newPassword) {
@@ -56,7 +75,7 @@ if (currentPassword && newPassword) {
       if (answers.newPassword === answers.newPasswordConfirm) {
         newPassword = answers.newPassword;
       } else {
-        console.log(chalk.red('New password values do not match'));
+        logger.info(chalk.red('New password values do not match'));
         process.exit(1);
       }
     }
@@ -65,18 +84,3 @@ if (currentPassword && newPassword) {
   });
 }
 
-function callUpdatePassword(currentPassword, newPassword) {
-  updatePassword(currentPassword, newPassword, (error, response, body) => {
-    if (error && error.code == 'ENOTFOUND') {
-      console.log(chalk.red(`Could not reach cryptid server. Is ${getServer()} reachable?`));
-      process.exit(1);
-    }
-
-    if (response.statusCode === 200) {
-      console.log(chalk.green('Your password has been updated'));
-    } else {
-      console.log(response.statusCode);
-      console.log(chalk.red('An error has occurred'));
-    }
-  });
-}

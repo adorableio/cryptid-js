@@ -49,6 +49,7 @@
   },
   "dependencies": {
     "chalk": "^2.1.0",
+    "cli-logger": "^0.5.40",
     "commander": "^2.11.0",
     "easy-table": "^1.1.0",
     "inquirer": "^3.2.3",
@@ -60,6 +61,9 @@
   "eslintConfig": {
     "extends": [
       "adorable"
-    ]
+    ],
+    "rules": {
+      "no-console": "warn"
+    }
   }
 }
