@@ -43,7 +43,8 @@
     "collectCoverageFrom": [
       "**/src/**",
       "!**/src/__mocks__/**",
-      "!**/src/browser.js"
+      "!**/src/browser.js",
+      "!**/src/bin/**"
     ]
   },
   "dependencies": {
