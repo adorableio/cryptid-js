@@ -1,4 +1,6 @@
-import {preferences} from './cli';
+import {SETTINGS} from './cli';
 
-preferences.account = { token: '', email: '' };
+SETTINGS.token = '';
+SETTINGS.email = '';
+
 process.exit();

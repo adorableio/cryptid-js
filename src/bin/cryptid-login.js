@@ -1,4 +1,8 @@
-import {logger, login, preferences} from './cli';
+import {
+  LOGGER,
+  SETTINGS,
+  login
+} from './cli';
 
 import chalk from 'chalk';
 import inquirer from 'inquirer';
@@ -12,9 +16,8 @@ program
 let username = program.username;
 let password = program.password;
 
-let {account} = preferences;
-if (account.token.length > 0 && account.email.length > 0) {
-  logger.info(chalk.yellow(`You are already logged-in as ${account.email}`));
+if (SETTINGS.isLoggedIn) {
+  LOGGER.info(chalk.yellow(`You are already logged-in as ${SETTINGS.email}`));
   process.exit();
 }
 

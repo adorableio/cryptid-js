@@ -1,21 +1,21 @@
 import {
-  fetchCurrentUser,
-  getServer,
-  logger,
-  preferences
+  LOGGER,
+  SERVER,
+  SETTINGS,
+  fetchCurrentUser
 } from './cli';
 
 import Table from 'easy-table';
 import chalk from 'chalk';
 
-if (preferences.needsLogin) {
-  logger.info(chalk.red('You must first login with "cryptid login"'));
+if (SETTINGS.needsLogin) {
+  LOGGER.info(chalk.red('You must first login with "cryptid login"'));
   process.exit(1);
 }
 
 fetchCurrentUser((error, response, body) => {
   if (error && error.code === 'ENOTFOUND') {
-    logger.info(chalk.red(`Could not reach cryptid server. Is ${getServer()} reachable?`));
+    LOGGER.info(chalk.red(`Could not reach cryptid SERVER. Is ${SERVER} reachable?`));
     process.exit(1);
   }
 
@@ -30,9 +30,9 @@ fetchCurrentUser((error, response, body) => {
       t.newRow();
     });
 
-    logger.info(t.toString());
+    LOGGER.info(t.toString());
   } else {
-    logger.info(chalk.red('Error fetching accounts'));
+    LOGGER.info(chalk.red('Error fetching accounts'));
     process.exit(1);
   }
 });

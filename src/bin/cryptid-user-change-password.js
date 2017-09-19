@@ -1,7 +1,7 @@
 import {
-  logger,
-  preferences,
-  server,
+  LOGGER,
+  SERVER,
+  SETTINGS,
   updatePassword
 } from './cli';
 
@@ -18,23 +18,23 @@ program
 let currentPassword = program.currentPassword;
 let newPassword = program.newPassword;
 
-if (preferences.needsLogin) {
-  logger.info(chalk.red('You must first login with "cryptid login"'));
+if (SETTINGS.needsLogin) {
+  LOGGER.info(chalk.red('You must first login with "cryptid login"'));
   process.exit(1);
 }
 
 function callUpdatePassword(old, updated) {
   updatePassword(old, updated, (error, response) => {
     if (error && error.code === 'ENOTFOUND') {
-      logger.info(chalk.red(`Could not reach cryptid server. Is ${server} reachable?`));
+      LOGGER.info(chalk.red(`Could not reach cryptid SERVER. Is ${SERVER} reachable?`));
       process.exit(1);
     }
 
     if (response.statusCode === 200) {
-      logger.info(chalk.green('Your password has been updated'));
+      LOGGER.info(chalk.green('Your password has been updated'));
     } else {
-      logger.info(response.statusCode);
-      logger.info(chalk.red('An error has occurred'));
+      LOGGER.info(response.statusCode);
+      LOGGER.info(chalk.red('An error has occurred'));
     }
   });
 }
@@ -75,7 +75,7 @@ if (currentPassword && newPassword) {
       if (answers.newPassword === answers.newPasswordConfirm) {
         newPassword = answers.newPassword;
       } else {
-        logger.info(chalk.red('New password values do not match'));
+        LOGGER.info(chalk.red('New password values do not match'));
         process.exit(1);
       }
     }

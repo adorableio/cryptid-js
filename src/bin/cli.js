@@ -1,33 +1,28 @@
 import Preferences from 'preferences';
 import chalk from 'chalk';
 import createLogger from 'cli-logger';
+import md5 from 'md5';
 import request from 'request';
 import url from 'url';
 
-export const server = process.env.CRYPTID_SERVER || 'https://cryptid.adorable.io';
+export const SERVER = process.env.CRYPTID_SERVER || 'https://cryptid.adorable.io';
 
 function buildUrl(path) {
-  return url.resolve(server, path);
+  return url.resolve(SERVER, path);
 }
 
-function loadPreferences() {
-  let prefs = new Preferences('com.adorable.cryptid', {
-    account: { token: '', email: '' },
-  });
+function loadSettings() {
+  let name = `com.adorable.cryptid.${md5(SERVER)}`;
+  let settings = new Preferences(name, {server: SERVER, token: '', email: ''});
 
-  let account = prefs.account;
-  prefs.isLoggedIn = account.token.length > 0 && account.email.length > 0;
-  prefs.needsLogin = !prefs.isLoggedIn;
+  settings.isLoggedIn = settings.token.length > 0 && settings.email.length > 0;
+  settings.needsLogin = !settings.isLoggedIn;
 
-  return prefs;
+  return settings;
 }
-export const preferences = loadPreferences();
-
-function getAppToken() {
-  return preferences.account.token;
-}
-
-export const logger = createLogger({level: createLogger.INFO});
+export const SETTINGS = loadSettings();
+export const TOKEN = SETTINGS.token;
+export const LOGGER = createLogger({level: createLogger.INFO});
 
 export function login(username, password) {
   let options = {
@@ -42,13 +37,18 @@ export function login(username, password) {
   };
 
   request(options, (error, response, body) => {
+    if (error && error.code === 'ENOTFOUND') {
+      LOGGER.info(chalk.red(`Could not reach cryptid server. Is ${SERVER} reachable?`));
+      process.exit(1);
+    }
+
     if (response.statusCode === 201) {
-      preferences.account.token = body.data.token;
-      preferences.account.email = username;
+      SETTINGS.token = body.data.token;
+      SETTINGS.email = username;
 
       process.exit(0);
     } else {
-      logger.info(chalk.red('Invalid password'));
+      LOGGER.info(chalk.red('Invalid password'));
     }
   });
 }
@@ -59,7 +59,7 @@ export function fetchCurrentUser(callback) {
     method: 'get',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Token token=${getAppToken()}`
+      Authorization: `Token token=${TOKEN}`
     }
   };
   request(options, callback);
@@ -70,7 +70,7 @@ export function createAccount(accountName, callback) {
     url: buildUrl('/api/accounts'),
     method: 'post',
     headers: {
-      Authorization: `Token token=${getAppToken()}`
+      Authorization: `Token token=${TOKEN}`
     },
     json: {
       account: {
@@ -86,7 +86,7 @@ export function updateAccount(accountId, accountName, callback) {
     url: buildUrl(`/api/accounts/${accountId}`),
     method: 'put',
     headers: {
-      Authorization: `Token token=${getAppToken()}`
+      Authorization: `Token token=${TOKEN}`
     },
     json: {
       account: {
@@ -102,7 +102,7 @@ export function addUserToAccount(accountId, email, callback) {
     url: buildUrl(`/api/accounts/${accountId}/users`),
     method: 'post',
     headers: {
-      Authorization: `Token token=${getAppToken()}`
+      Authorization: `Token token=${TOKEN}`
     },
     json: {
       user: {
@@ -118,7 +118,7 @@ export function updatePassword(currentPassword, newPassword, callback) {
     url: buildUrl('/api/users/current'),
     method: 'put',
     headers: {
-      Authorization: `Token token=${getAppToken()}`
+      Authorization: `Token token=${TOKEN}`
     },
     json: {
       user: {
