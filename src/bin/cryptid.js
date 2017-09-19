@@ -12,5 +12,6 @@ program
   .command('accounts', 'Account actions')
   // .command('products', 'Interact with products')
   // .command('properties', 'Interact with properties')
+  .command('server', 'Display the currently-configured server endpoint')
   .command('logout', 'Logout of Cryptid')
   .parse(process.argv);
