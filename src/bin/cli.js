@@ -175,3 +175,23 @@ export function createProduct(accountId, productName, callback) {
     callback(response, body);
   });
 }
+
+export function updateProduct(data, callback) {
+  let {accountId, productId, productName} = data;
+
+  let options = {
+    url: buildUrl(`/api/accounts/${accountId}/products/${productId}`),
+    method: 'put',
+    headers: {Authorization: `Token token=${TOKEN}`},
+    json: {
+      product: {
+        name: productName
+      }
+    }
+  };
+
+  request(options, (error, response, body) => {
+    checkError(error);
+    callback(response, body);
+  });
+}
