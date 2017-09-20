@@ -16,8 +16,8 @@ fetchCurrentUser((response, body) => {
     let user = body.data;
 
     user.accounts.forEach((account) => {
-      t.cell('id', account.id);
-      t.cell('account name', account.name);
+      t.cell('ID', account.id);
+      t.cell('Account Name', account.name);
       t.newRow();
     });
 
