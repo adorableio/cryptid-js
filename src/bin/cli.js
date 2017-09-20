@@ -157,3 +157,21 @@ export function updatePassword(passwords, callback) {
     callback(response, body);
   });
 }
+
+export function createProduct(accountId, productName, callback) {
+  let options = {
+    url: buildUrl(`/api/accounts/${accountId}/products`),
+    method: 'post',
+    headers: {Authorization: `Token token=${TOKEN}`},
+    json: {
+      product: {
+        name: productName
+      }
+    }
+  };
+
+  request(options, (error, response, body) => {
+    checkError(error);
+    callback(response, body);
+  });
+}
