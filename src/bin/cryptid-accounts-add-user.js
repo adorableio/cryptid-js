@@ -1,6 +1,5 @@
 import {
   LOGGER,
-  SERVER,
   SETTINGS,
   addUserToAccount
 } from './cli';
@@ -25,12 +24,7 @@ if (!program.accountId) {
   process.exit(1);
 }
 
-addUserToAccount(program.accountId, program.email, (error, response, body) => {
-  if (error && error.code === 'ENOTFOUND') {
-    LOGGER.info(chalk.red(`Could not reach cryptid SERVER. Is ${SERVER} reachable?`));
-    process.exit(1);
-  }
-
+addUserToAccount(program.accountId, program.email, (response, body) => {
   if (response.statusCode === 201) {
     let {email, password} = body.data;
     LOGGER.info(chalk.green('User was created and added to account. Give them the following credentials to use:\n'));
@@ -41,13 +35,13 @@ addUserToAccount(program.accountId, program.email, (error, response, body) => {
     let {email} = body.data;
     LOGGER.info(chalk.yellow(`Existing user ${email} was successfully added to the account.`));
   } else if (response.statusCode === 400) {
-    LOGGER.info(chalk.red(`The user ${program.email} already has access to that account`));
+    LOGGER.error(chalk.red(`The user ${program.email} already has access to that account`));
     process.exit(1);
   } else if (response.statusCode === 404) {
-    LOGGER.info(chalk.red('Account not found'));
+    LOGGER.error(chalk.red('Account not found'));
     process.exit(1);
   } else if (response.statusCode === 403) {
-    LOGGER.info(chalk.red('Invalid account'));
+    LOGGER.error(chalk.red('Invalid account'));
     process.exit(1);
   }
 });

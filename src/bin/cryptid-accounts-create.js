@@ -1,6 +1,5 @@
 import {
   LOGGER,
-  SERVER,
   SETTINGS,
   createAccount
 } from './cli';
@@ -21,12 +20,7 @@ if (!program.accountName) {
   process.exit(1);
 }
 
-createAccount(program.accountName, (error, response, body) => {
-  if (error && error.code === 'ENOTFOUND') {
-    LOGGER.info(chalk.red(`Could not reach cryptid SERVER. Is ${SERVER} reachable?`));
-    process.exit(1);
-  }
-
+createAccount(program.accountName, (response, body) => {
   if (response.statusCode === 201) {
     let t = new Table();
 

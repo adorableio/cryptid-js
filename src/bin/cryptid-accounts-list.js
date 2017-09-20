@@ -1,6 +1,5 @@
 import {
   LOGGER,
-  SERVER,
   SETTINGS,
   fetchCurrentUser
 } from './cli';
@@ -10,16 +9,11 @@ import chalk from 'chalk';
 
 SETTINGS.checkLogin();
 
-fetchCurrentUser((error, response, body) => {
-  if (error && error.code === 'ENOTFOUND') {
-    LOGGER.info(chalk.red(`Could not reach cryptid SERVER. Is ${SERVER} reachable?`));
-    process.exit(1);
-  }
-
+fetchCurrentUser((response, body) => {
   if (response.statusCode === 200) {
     let t = new Table();
 
-    let user = JSON.parse(body).data;
+    let user = body.data;
 
     user.accounts.forEach((account) => {
       t.cell('id', account.id);

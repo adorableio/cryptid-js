@@ -30,6 +30,19 @@ function loadSettings() {
 export const SETTINGS = loadSettings();
 export const TOKEN = SETTINGS.token;
 
+function checkError(error) {
+  if (error && error.code === 'ENOTFOUND') {
+    LOGGER.info(chalk.red(`Could not reach cryptid server. Is ${SERVER} reachable?`));
+    process.exit(1);
+  }
+}
+
+/* =========================================================
+ *
+ *  Cryptid Service Functions
+ *
+ * ========================================================= */
+
 export function login(username, password) {
   let options = {
     url: buildUrl('/api/sessions'),
@@ -43,18 +56,14 @@ export function login(username, password) {
   };
 
   request(options, (error, response, body) => {
-    if (error && error.code === 'ENOTFOUND') {
-      LOGGER.info(chalk.red(`Could not reach cryptid server. Is ${SERVER} reachable?`));
-      process.exit(1);
-    }
 
     if (response.statusCode === 201) {
       SETTINGS.token = body.data.token;
       SETTINGS.email = username;
-
-      process.exit(0);
+      process.exit();
     } else {
       LOGGER.info(chalk.red('Invalid password'));
+      process.exit(1);
     }
   });
 }
@@ -63,75 +72,88 @@ export function fetchCurrentUser(callback) {
   let options = {
     url: buildUrl('/api/users/current'),
     method: 'get',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Token token=${TOKEN}`
-    }
+    json: true,
+    headers: {Authorization: `Token token=${TOKEN}`}
   };
-  request(options, callback);
+
+  request(options, (error, response, body) => {
+    checkError(error);
+    callback(response, body);
+  });
 }
 
 export function createAccount(accountName, callback) {
   let options = {
     url: buildUrl('/api/accounts'),
     method: 'post',
-    headers: {
-      Authorization: `Token token=${TOKEN}`
-    },
+    headers: {Authorization: `Token token=${TOKEN}`},
     json: {
       account: {
         name: accountName
       }
     }
   };
-  request(options, callback);
+
+  request(options, (error, response, body) => {
+    checkError(error);
+    callback(response, body);
+  });
 }
 
 export function updateAccount(accountId, accountName, callback) {
   let options = {
     url: buildUrl(`/api/accounts/${accountId}`),
     method: 'put',
-    headers: {
-      Authorization: `Token token=${TOKEN}`
-    },
+    headers: {Authorization: `Token token=${TOKEN}`},
     json: {
       account: {
         name: accountName
       }
     }
   };
-  request(options, callback);
+
+  request(options, (error, response, body) => {
+    checkError(error);
+    callback(response, body);
+  });
 }
 
 export function addUserToAccount(accountId, email, callback) {
   let options = {
     url: buildUrl(`/api/accounts/${accountId}/users`),
     method: 'post',
-    headers: {
-      Authorization: `Token token=${TOKEN}`
-    },
+    headers: {Authorization: `Token token=${TOKEN}`},
     json: {
       user: {
         email: email
       }
     }
   };
-  request(options, callback);
+
+  request(options, (error, response, body) => {
+    checkError(error);
+    callback(response, body);
+  });
 }
 
-export function updatePassword(currentPassword, newPassword, callback) {
+export function updatePassword(passwords, callback) {
+  let {currentPassword, newPassword, newPasswordConfirm} = passwords;
+
   let options = {
     url: buildUrl('/api/users/current'),
     method: 'put',
-    headers: {
-      Authorization: `Token token=${TOKEN}`
-    },
+    headers: {Authorization: `Token token=${TOKEN}`},
     json: {
       user: {
+        current: currentPassword,
         password: newPassword,
-        password_confirmation: newPassword,
+        password_confirmation: newPasswordConfirm,
       }
     }
   };
-  request(options, callback);
+
+  request(options, (error, response, body) => {
+    checkError(error);
+    callback(response, body);
+  });
 }
