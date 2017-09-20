@@ -10,7 +10,7 @@ program
   .command('login', 'Login to Cryptid')
   .command('user', 'User actions')
   .command('accounts', 'Account actions')
-  // .command('products', 'Interact with products')
+  .command('products', 'Product actions')
   // .command('properties', 'Interact with properties')
   .command('server', 'Display the currently-configured server endpoint')
   .command('logout', 'Logout of Cryptid')
