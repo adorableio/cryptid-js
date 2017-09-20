@@ -1,12 +1,18 @@
 {
   "name": "cryptid",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "description": "javascript client to cryptid analytics",
   "website": "https://cryptid.adorable.io",
   "main": "dist/index.js",
+  "bin": {
+    "cryptid": "./dist/bin/cryptid"
+  },
   "scripts": {
-    "build": "$(npm bin)/babel src/ --ignore src/__mocks__ -d dist --copy-files",
-    "watch": "$(npm bin)/babel src/ --ignore src/__mocks__ -d dist --copy-files --watch",
+    "build:lib": "BABEL_ENV=lib $(npm bin)/babel src/ --ignore=src/__mocks__ --out-dir=dist",
+    "build:bin": "BABEL_ENV=cli $(npm bin)/babel src/bin/ --out-dir=dist/bin --copy-files",
+    "build": "rm -rf dist/ && npm run build:lib && npm run build:bin",
+    "watch:src": "npm run build:lib -- --watch",
+    "watch:bin": "npm run build:bin -- --watch",
     "prepare": "npm run build",
     "test": "jest"
   },
@@ -20,9 +26,12 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.0",
+    "babel-register": "^6.26.0",
     "ci-publish": "^1.3.0",
     "eslint": "^4.6.1",
+    "eslint-config-adorable": "0.0.6",
     "eslint-plugin-jest": "^21.0.0",
     "eslint-plugin-prefer-object-spread": "^1.2.1",
     "jest": "^21.0.1",
@@ -34,10 +43,28 @@
     "collectCoverageFrom": [
       "**/src/**",
       "!**/src/__mocks__/**",
-      "!**/src/browser.js"
+      "!**/src/browser.js",
+      "!**/src/bin/**"
     ]
   },
   "dependencies": {
-    "reqwest": "^2.0.5"
+    "chalk": "^2.1.0",
+    "cli-logger": "^0.5.40",
+    "commander": "^2.11.0",
+    "easy-table": "^1.1.0",
+    "inquirer": "^3.2.3",
+    "md5": "^2.2.1",
+    "preferences": "^0.2.1",
+    "request": "^2.81.0",
+    "reqwest": "^2.0.5",
+    "xhr2": "^0.1.4"
+  },
+  "eslintConfig": {
+    "extends": [
+      "adorable"
+    ],
+    "rules": {
+      "no-console": "warn"
+    }
   }
 }

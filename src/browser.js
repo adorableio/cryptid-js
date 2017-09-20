@@ -11,4 +11,4 @@ export default function collectBrowserMetadata() {
     viewportSize: `${window.screen.width}x${window.screen.height}`,
     screenColors: window.screen.colorDepth,
   };
-};
+}
