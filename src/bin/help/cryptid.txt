@@ -1,0 +1,4 @@
+Command-line Cryptid Analytics client
+
+  Login with your cryptid service credentials using 'cryptid login' and then
+  most commands should be available.

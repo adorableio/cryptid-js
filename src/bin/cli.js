@@ -1,15 +1,17 @@
 import Preferences from 'preferences';
 import chalk from 'chalk';
 import createLogger from 'cli-logger';
+import fs from 'fs';
 import md5 from 'md5';
+import path from 'path';
 import request from 'request';
 import url from 'url';
 
 export const SERVER = process.env.CRYPTID_SERVER || 'https://cryptid.adorable.io';
 export const LOGGER = createLogger({level: createLogger.INFO});
 
-function buildUrl(path) {
-  return url.resolve(SERVER, path);
+function buildUrl(uri) {
+  return url.resolve(SERVER, uri);
 }
 
 function loadSettings() {
@@ -35,6 +37,21 @@ function checkError(error) {
     LOGGER.info(chalk.red(`Could not reach cryptid server. Is ${SERVER} reachable?`));
     process.exit(1);
   }
+}
+
+/* =========================================================
+ *
+ *  Helper Functions
+ *
+ *  ========================================================= */
+
+export function loadHelp(filename) {
+  let helpFilePath = path.join(__dirname, 'help', `${filename}.txt`);
+  return fs.readFileSync(helpFilePath, 'utf8');
+}
+
+export function loadVersion() {
+  return require(path.join(__dirname, '../..', 'package.json')).version;
 }
 
 /* =========================================================
