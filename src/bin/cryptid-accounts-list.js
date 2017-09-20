@@ -8,10 +8,7 @@ import {
 import Table from 'easy-table';
 import chalk from 'chalk';
 
-if (SETTINGS.needsLogin) {
-  LOGGER.info(chalk.red('You must first login with "cryptid login"'));
-  process.exit(1);
-}
+SETTINGS.checkLogin();
 
 fetchCurrentUser((error, response, body) => {
   if (error && error.code === 'ENOTFOUND') {

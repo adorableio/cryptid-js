@@ -6,6 +6,7 @@ import request from 'request';
 import url from 'url';
 
 export const SERVER = process.env.CRYPTID_SERVER || 'https://cryptid.adorable.io';
+export const LOGGER = createLogger({level: createLogger.INFO});
 
 function buildUrl(path) {
   return url.resolve(SERVER, path);
@@ -15,14 +16,19 @@ function loadSettings() {
   let name = `com.adorable.cryptid.${md5(SERVER)}`;
   let settings = new Preferences(name, {server: SERVER, token: '', email: ''});
 
-  settings.isLoggedIn = settings.token.length > 0 && settings.email.length > 0;
-  settings.needsLogin = !settings.isLoggedIn;
+  let loggedIn = settings.token.length > 0 && settings.email.length > 0;
+  settings.loggedIn = loggedIn;
+  settings.checkLogin = () => {
+    if (!loggedIn) {
+      LOGGER.info(chalk.red('You must first login with "cryptid login"'));
+      process.exit(1);
+    }
+  };
 
   return settings;
 }
 export const SETTINGS = loadSettings();
 export const TOKEN = SETTINGS.token;
-export const LOGGER = createLogger({level: createLogger.INFO});
 
 export function login(username, password) {
   let options = {

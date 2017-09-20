@@ -14,10 +14,7 @@ program
   .parse(process.argv);
 
 
-if (SETTINGS.needsLogin) {
-  LOGGER.info(chalk.red('You must first login with "cryptid login"'));
-  process.exit(1);
-}
+SETTINGS.checkLogin();
 
 if (!program.accountName) {
   LOGGER.info(chalk.red('Account name is required (use -n <accountName>)'));

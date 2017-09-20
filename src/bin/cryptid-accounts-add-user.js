@@ -13,10 +13,7 @@ program
   .option('-e, --email <email>', 'Email of the user to add')
   .parse(process.argv);
 
-if (SETTINGS.needsLogin) {
-  LOGGER.info(chalk.red('You must first login with "cryptid login"'));
-  process.exit(1);
-}
+SETTINGS.checkLogin();
 
 if (!program.email) {
   LOGGER.info(chalk.red('Email is required (use -e <email>)'));

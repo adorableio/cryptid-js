@@ -18,10 +18,7 @@ program
 let currentPassword = program.currentPassword;
 let newPassword = program.newPassword;
 
-if (SETTINGS.needsLogin) {
-  LOGGER.info(chalk.red('You must first login with "cryptid login"'));
-  process.exit(1);
-}
+SETTINGS.checkLogin();
 
 function callUpdatePassword(old, updated) {
   updatePassword(old, updated, (error, response) => {
