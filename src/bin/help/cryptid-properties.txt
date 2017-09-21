@@ -1,0 +1,12 @@
+Interact with Cryptid Analytics Properties
+
+  When using Cryptid Analytics, "properties" are the most fine-grain
+  organizing structures in the hierarchy. Whereas an "account" may map to a
+  company or other large-scaleo development organization and a "product" maps
+  to a single offering by said organization, a "property" maps most closely
+  to a code base.
+
+  Example: I want to track analytics for my Cheese Grater app, but I have a
+  front-end application as well as well as an API service and a mobile
+  application. In my case I'd have a single product, with three properties
+  for the web, api and mobile code bases.

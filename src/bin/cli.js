@@ -33,8 +33,18 @@ export const SETTINGS = loadSettings();
 export const TOKEN = SETTINGS.token;
 
 function checkError(error) {
-  if (error && error.code === 'ENOTFOUND') {
-    LOGGER.info(chalk.red(`Could not reach cryptid server. Is ${SERVER} reachable?`));
+  if (error) {
+    switch (error.code) {
+      case 'ENOTFOUND':
+        LOGGER.info(chalk.red(`Could not reach cryptid server. Is ${SERVER} reachable?`));
+        break;
+      case 'ECONNREFUSED':
+        LOGGER.info(chalk.red(`Could not reach cryptid server. Is ${SERVER} reachable?`));
+        break;
+      default:
+        LOGGER.error(chalk.red(`An error occurred communicating with ${SERVER}`));
+        break;
+    }
     process.exit(1);
   }
 }
@@ -203,6 +213,57 @@ export function updateProduct(data, callback) {
     json: {
       product: {
         name: productName
+      }
+    }
+  };
+
+  request(options, (error, response, body) => {
+    checkError(error);
+    callback(response, body);
+  });
+}
+
+export function createProperty(data, callback) {
+  let {
+    accountId,
+    productId,
+    propertyName,
+    propertyType,
+  } = data;
+
+  let options = {
+    url: buildUrl(`/api/accounts/${accountId}/products/${productId}/properties`),
+    method: 'post',
+    headers: {Authorization: `Token token=${TOKEN}`},
+    json: {
+      property: {
+        name: propertyName,
+        propertyType: propertyType
+      }
+    }
+  };
+
+  request(options, (error, response, body) => {
+    checkError(error);
+    callback(response, body);
+  });
+}
+
+export function updateProperty(data, callback) {
+  let {
+    accountId,
+    productId,
+    propertyName,
+    propertyId,
+  } = data;
+
+  let options = {
+    url: buildUrl(`/api/accounts/${accountId}/products/${productId}/properties/${propertyId}`),
+    method: 'put',
+    headers: {Authorization: `Token token=${TOKEN}`},
+    json: {
+      property: {
+        name: propertyName,
       }
     }
   };
