@@ -222,3 +222,54 @@ export function updateProduct(data, callback) {
     callback(response, body);
   });
 }
+
+export function createProperty(data, callback) {
+  let {
+    accountId,
+    productId,
+    propertyName,
+    propertyType,
+  } = data;
+
+  let options = {
+    url: buildUrl(`/api/accounts/${accountId}/products/${productId}/properties`),
+    method: 'post',
+    headers: {Authorization: `Token token=${TOKEN}`},
+    json: {
+      property: {
+        name: propertyName,
+        propertyType: propertyType
+      }
+    }
+  };
+
+  request(options, (error, response, body) => {
+    checkError(error);
+    callback(response, body);
+  });
+}
+
+export function updateProperty(data, callback) {
+  let {
+    accountId,
+    productId,
+    propertyName,
+    propertyId,
+  } = data;
+
+  let options = {
+    url: buildUrl(`/api/accounts/${accountId}/products/${productId}/properties/${propertyId}`),
+    method: 'put',
+    headers: {Authorization: `Token token=${TOKEN}`},
+    json: {
+      property: {
+        name: propertyName,
+      }
+    }
+  };
+
+  request(options, (error, response, body) => {
+    checkError(error);
+    callback(response, body);
+  });
+}
