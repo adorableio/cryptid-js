@@ -6,7 +6,7 @@ import {
 
 import Table from 'easy-table';
 import chalk from 'chalk';
-import {find} from 'lodash';
+import {filter} from 'lodash';
 import program from 'commander';
 
 program
@@ -15,29 +15,42 @@ program
 
 SETTINGS.checkLogin();
 
-if (!program.accountId) {
-  LOGGER.error(chalk.red('Account id is required (use -a <accountId>)'));
-  process.exit(1);
-}
-
 fetchCurrentUser((response, body) => {
   if (response.statusCode === 200) {
-    let account = find(body.data.accounts, {id: parseInt(program.accountId, 10)});
+    let products = [];
 
-    if (account) {
-      let t = new Table();
-
+    body.data.accounts.forEach((account) => {
       account.products.forEach((product) => {
-        t.cell('ID', product.id);
-        t.cell('Product Name', product.name);
-        t.newRow();
+        products.push({
+          ...product,
+          accountId: account.id,
+          accountName: account.name,
+        });
       });
+    });
 
-      LOGGER.info(t.toString());
-    } else {
-      LOGGER.error(chalk.red(`Invalid account id: ${program.accountId}`));
-      process.exit(1);
+    if (program.accountId) {
+      let accountId = parseInt(program.accountId, 10);
+      products = filter(products, {accountId});
     }
+
+    if (products.length === 0) {
+      LOGGER.info(chalk.yellow('No matching properties found'));
+      process.exit();
+    }
+
+    let t = new Table();
+
+    products.forEach((product) => {
+      t.cell('ID', product.id);
+      t.cell('Product Name', product.name);
+      t.cell('Account Name (ID)', `${product.accountName} (${product.accountId})`);
+      t.newRow();
+    });
+
+    t.sort(['Account Name (ID)', 'Product Name']);
+
+    LOGGER.info(t.toString());
   } else {
     LOGGER.error(chalk.red('Error fetching products'));
     process.exit(1);
