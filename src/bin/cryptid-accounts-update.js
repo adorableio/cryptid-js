@@ -1,6 +1,5 @@
 import {
   LOGGER,
-  SERVER,
   SETTINGS,
   updateAccount
 } from './cli';
@@ -14,27 +13,19 @@ program
   .option('-n, --account-name <accountName>', 'Account name')
   .parse(process.argv);
 
-if (SETTINGS.needsLogin) {
-  LOGGER.info(chalk.red('You must first login with "cryptid login"'));
-  process.exit(1);
-}
+SETTINGS.checkLogin();
 
 if (!program.accountName) {
-  LOGGER.info(chalk.red('Account name is required (use -n <accountName>)'));
+  LOGGER.error(chalk.red('Account name is required (use -n <accountName>)'));
   process.exit(1);
 }
 
 if (!program.accountId) {
-  LOGGER.info(chalk.red('Account id is required (use -a <accountId>)'));
+  LOGGER.error(chalk.red('Account id is required (use -a <accountId>)'));
   process.exit(1);
 }
 
-updateAccount(program.accountId, program.accountName, (error, response, body) => {
-  if (error && error.code === 'ENOTFOUND') {
-    LOGGER.info(chalk.red(`Could not reach cryptid SERVER. Is ${SERVER} reachable?`));
-    process.exit(1);
-  }
-
+updateAccount(program.accountId, program.accountName, (response, body) => {
   if (response.statusCode === 200) {
     let t = new Table();
 
@@ -48,8 +39,7 @@ updateAccount(program.accountId, program.accountName, (error, response, body) =>
 
     LOGGER.info(t.toString());
   } else {
-    LOGGER.info(response.statusCode);
-    LOGGER.info(chalk.red('Error updating account'));
+    LOGGER.error(chalk.red('Error updating account'));
     process.exit(1);
   }
 });

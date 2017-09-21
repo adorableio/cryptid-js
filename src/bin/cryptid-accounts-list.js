@@ -1,6 +1,5 @@
 import {
   LOGGER,
-  SERVER,
   SETTINGS,
   fetchCurrentUser
 } from './cli';
@@ -8,25 +7,17 @@ import {
 import Table from 'easy-table';
 import chalk from 'chalk';
 
-if (SETTINGS.needsLogin) {
-  LOGGER.info(chalk.red('You must first login with "cryptid login"'));
-  process.exit(1);
-}
+SETTINGS.checkLogin();
 
-fetchCurrentUser((error, response, body) => {
-  if (error && error.code === 'ENOTFOUND') {
-    LOGGER.info(chalk.red(`Could not reach cryptid SERVER. Is ${SERVER} reachable?`));
-    process.exit(1);
-  }
-
+fetchCurrentUser((response, body) => {
   if (response.statusCode === 200) {
     let t = new Table();
 
-    let user = JSON.parse(body).data;
+    let user = body.data;
 
     user.accounts.forEach((account) => {
-      t.cell('id', account.id);
-      t.cell('account name', account.name);
+      t.cell('ID', account.id);
+      t.cell('Account Name', account.name);
       t.newRow();
     });
 

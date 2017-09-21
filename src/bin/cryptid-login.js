@@ -16,7 +16,7 @@ program
 let username = program.username;
 let password = program.password;
 
-if (SETTINGS.isLoggedIn) {
+if (SETTINGS.loggedIn) {
   LOGGER.info(chalk.yellow(`You are already logged-in as ${SETTINGS.email}`));
   process.exit();
 }

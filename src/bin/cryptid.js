@@ -1,17 +1,16 @@
-import path from 'path';
+import {loadHelp, loadVersion} from './cli';
+
 import program from 'commander';
 
-let version = require(path.join(__dirname, '../..', 'package.json'))
-  .version;
-
 program
-  .version(version)
-  .description('Admin interface to Cryptid Analytics')
+  .version(loadVersion())
+  .description(loadHelp('cryptid'))
   .command('login', 'Login to Cryptid')
+  .command('logout', 'Logout of Cryptid')
   .command('user', 'User actions')
   .command('accounts', 'Account actions')
-  // .command('products', 'Interact with products')
+  .command('products', 'Product actions')
   // .command('properties', 'Interact with properties')
   .command('server', 'Display the currently-configured server endpoint')
-  .command('logout', 'Logout of Cryptid')
+  .command('version', 'Print version')
   .parse(process.argv);
