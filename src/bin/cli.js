@@ -33,8 +33,18 @@ export const SETTINGS = loadSettings();
 export const TOKEN = SETTINGS.token;
 
 function checkError(error) {
-  if (error && error.code === 'ENOTFOUND') {
-    LOGGER.info(chalk.red(`Could not reach cryptid server. Is ${SERVER} reachable?`));
+  if (error) {
+    switch (error.code) {
+      case 'ENOTFOUND':
+        LOGGER.info(chalk.red(`Could not reach cryptid server. Is ${SERVER} reachable?`));
+        break;
+      case 'ECONNREFUSED':
+        LOGGER.info(chalk.red(`Could not reach cryptid server. Is ${SERVER} reachable?`));
+        break;
+      default:
+        LOGGER.error(chalk.red(`An error occurred communicating with ${SERVER}`));
+        break;
+    }
     process.exit(1);
   }
 }
