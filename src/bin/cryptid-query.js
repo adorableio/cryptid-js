@@ -30,23 +30,36 @@ const queryOpts = {
 client.query(queryOpts)
   .catch(err => LOGGER.error(chalk.red(err)) && process.exit(1))
   .then(resp => {
-    const events = resp.data.events.map(event => {
-      // eslint-disable-next-line no-unused-vars
-      let {__typename, ...mappedEvent} = event;
-      return mappedEvent;
-    });
 
     switch (program.format) {
       case 'json':
-        LOGGER.info(JSON.stringify(events));
+        LOGGER.info(JSON.stringify(resp.data));
         break;
       case 'csv':
       default:
         const opts = {header: true};
-        csvify(events, opts, (err, output) => {
-          LOGGER.info(output);
-        });
+        if (resp.data.events) {
+          const events = resp.data.events.map(event => {
+            // eslint-disable-next-line no-unused-vars
+            let {__typename, ...mappedEvent} = event;
+            return mappedEvent;
+          });
+          if (events.length > 0) {
+            csvify(events, opts, (err, output) => {
+              LOGGER.info(output);
+            });
+          }
+        }
+
+        const view = resp.data.view;
+        if (view) {
+          csvify(view.lines, opts, (err, output) => {
+            LOGGER.info(`Event Summary: ${view.name}`);
+            LOGGER.info('----------------------------------------------------');
+            LOGGER.info(output);
+          });
+        }
         break;
     }
-
   });
+
