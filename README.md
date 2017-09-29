@@ -6,7 +6,8 @@ This library should be used to integrate [Cryptid
 Analytics](https://cryptid.adorable.io) into web-based javascript applications
 (React, Vue, etc. or a simple script tag at the bottome of a static page.)
 
-For [React Native]() javascript projects, use
+For [React Native](https://facebook.github.io/react-native/) javascript
+projects, use
 [cryptid-react-native](https://github.com/adorableio/cryptid-react-native),
 which will gather device information rather than browser information.
 
