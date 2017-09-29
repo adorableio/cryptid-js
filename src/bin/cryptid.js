@@ -11,6 +11,7 @@ program
   .command('accounts', 'Account actions')
   .command('products', 'Product actions')
   .command('properties', 'Property actions')
+  .command('query', 'Query the event store for a property')
   .command('server', 'Display the currently-configured server endpoint')
   .command('version', 'Print version')
   .parse(process.argv);

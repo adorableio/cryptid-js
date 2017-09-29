@@ -1,6 +1,10 @@
+import ApolloClient, { createNetworkInterface } from 'apollo-client';
+
 import Preferences from 'preferences';
 import chalk from 'chalk';
 import createLogger from 'cli-logger';
+// eslint-disable-next-line no-unused-vars
+import fetch from 'isomorphic-fetch';
 import fs from 'fs';
 import md5 from 'md5';
 import path from 'path';
@@ -8,7 +12,7 @@ import request from 'request';
 import url from 'url';
 
 export const SERVER = process.env.CRYPTID_SERVER || 'https://cryptid.adorable.io';
-export const LOGGER = createLogger({level: createLogger.INFO});
+export const LOGGER = createLogger({ level: createLogger.INFO });
 
 function buildUrl(uri) {
   return url.resolve(SERVER, uri);
@@ -16,7 +20,7 @@ function buildUrl(uri) {
 
 function loadSettings() {
   let name = `com.adorable.cryptid.${md5(SERVER)}`;
-  let settings = new Preferences(name, {server: SERVER, token: '', email: ''});
+  let settings = new Preferences(name, { server: SERVER, token: '', email: '' });
 
   let loggedIn = settings.token.length > 0 && settings.email.length > 0;
   settings.loggedIn = loggedIn;
@@ -66,6 +70,23 @@ export function loadVersion() {
 
 /* =========================================================
  *
+ *  GraphQL Functions
+ *
+ *  ========================================================= */
+
+export function buildGQLClient() {
+  return new ApolloClient({
+    networkInterface: createNetworkInterface({
+      uri: url.resolve(SERVER, '/api/reports'),
+      opts: {
+        headers: { Authorization: `Token token=${TOKEN}` }
+      }
+    })
+  });
+}
+
+/* =========================================================
+ *
  *  Cryptid Service Functions
  *
  * ========================================================= */
@@ -100,7 +121,7 @@ export function fetchCurrentUser(callback) {
     url: buildUrl('/api/users/current'),
     method: 'get',
     json: true,
-    headers: {Authorization: `Token token=${TOKEN}`}
+    headers: { Authorization: `Token token=${TOKEN}` }
   };
 
   request(options, (error, response, body) => {
@@ -113,7 +134,7 @@ export function createAccount(accountName, callback) {
   let options = {
     url: buildUrl('/api/accounts'),
     method: 'post',
-    headers: {Authorization: `Token token=${TOKEN}`},
+    headers: { Authorization: `Token token=${TOKEN}` },
     json: {
       account: {
         name: accountName
@@ -131,7 +152,7 @@ export function updateAccount(accountId, accountName, callback) {
   let options = {
     url: buildUrl(`/api/accounts/${accountId}`),
     method: 'put',
-    headers: {Authorization: `Token token=${TOKEN}`},
+    headers: { Authorization: `Token token=${TOKEN}` },
     json: {
       account: {
         name: accountName
@@ -149,7 +170,7 @@ export function addUserToAccount(accountId, email, callback) {
   let options = {
     url: buildUrl(`/api/accounts/${accountId}/users`),
     method: 'post',
-    headers: {Authorization: `Token token=${TOKEN}`},
+    headers: { Authorization: `Token token=${TOKEN}` },
     json: {
       user: {
         email: email
@@ -164,12 +185,12 @@ export function addUserToAccount(accountId, email, callback) {
 }
 
 export function updatePassword(passwords, callback) {
-  let {currentPassword, newPassword, newPasswordConfirm} = passwords;
+  let { currentPassword, newPassword, newPasswordConfirm } = passwords;
 
   let options = {
     url: buildUrl('/api/users/current'),
     method: 'put',
-    headers: {Authorization: `Token token=${TOKEN}`},
+    headers: { Authorization: `Token token=${TOKEN}` },
     json: {
       user: {
         current: currentPassword,
@@ -189,7 +210,7 @@ export function createProduct(accountId, productName, callback) {
   let options = {
     url: buildUrl(`/api/accounts/${accountId}/products`),
     method: 'post',
-    headers: {Authorization: `Token token=${TOKEN}`},
+    headers: { Authorization: `Token token=${TOKEN}` },
     json: {
       product: {
         name: productName
@@ -204,12 +225,12 @@ export function createProduct(accountId, productName, callback) {
 }
 
 export function updateProduct(data, callback) {
-  let {accountId, productId, productName} = data;
+  let { accountId, productId, productName } = data;
 
   let options = {
     url: buildUrl(`/api/accounts/${accountId}/products/${productId}`),
     method: 'put',
-    headers: {Authorization: `Token token=${TOKEN}`},
+    headers: { Authorization: `Token token=${TOKEN}` },
     json: {
       product: {
         name: productName
@@ -234,7 +255,7 @@ export function createProperty(data, callback) {
   let options = {
     url: buildUrl(`/api/accounts/${accountId}/products/${productId}/properties`),
     method: 'post',
-    headers: {Authorization: `Token token=${TOKEN}`},
+    headers: { Authorization: `Token token=${TOKEN}` },
     json: {
       property: {
         name: propertyName,
@@ -260,7 +281,7 @@ export function updateProperty(data, callback) {
   let options = {
     url: buildUrl(`/api/accounts/${accountId}/products/${productId}/properties/${propertyId}`),
     method: 'put',
-    headers: {Authorization: `Token token=${TOKEN}`},
+    headers: { Authorization: `Token token=${TOKEN}` },
     json: {
       property: {
         name: propertyName,
