@@ -115,7 +115,7 @@ overridden by including them in the event object:
 | `documentLocationUrl` | URL of the page | `http://example.org/foo.html` |
 | `documentReferer` | Referrer (if any) of the page | `http://google.com` |
 | `documentEncoding` | The character set used on the page  | `UTF-8` |
-| `documentTitle` | The title of the page | `My Cool Application | Login` |
+| `documentTitle` | The title of the page | `My Cool Application >  Login` |
 | `documentHostname` | The hostname the page was served from | `example.org` |
 | `documentPath` | The document path of the page | `/foo.html` |
 | `userLanguage` | The configured language of the browser | `en-US` |
