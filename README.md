@@ -110,8 +110,8 @@ event or the service.
 List of browser metadata fields that are automatically collected and may be
 overridden by including them in the event object:
 
-| Field | Description | Exammple |
-|-------|-------------|
+| Field | Description | Example |
+|-------|-------------|---------|
 | `documentLocationUrl` | URL of the page | `http://example.org/foo.html` |
 | `documentReferer` | Referrer (if any) of the page | `http://google.com` |
 | `documentEncoding` | The character set used on the page  | `UTF-8` |
