@@ -1,9 +1,13 @@
 {
   "env": {
     "lib": {
-      "ignore": [
-        "src/bin/"
+      "ignore": [ "src/bin/" ],
+      "presets": [
+        ["env", { "targets": {"browsers": ["last 2 versions"]} }]
       ]
+    },
+    "cli": {
+      "ignore": ["src/*.js"],
     }
   },
   "presets": [
