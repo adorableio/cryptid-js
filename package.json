@@ -8,8 +8,8 @@
     "cryptid": "./dist/bin/cryptid"
   },
   "scripts": {
-    "build:lib": "BABEL_ENV=lib $(npm bin)/babel src/ --ignore=src/__mocks__ --out-dir=dist",
-    "build:bin": "BABEL_ENV=cli $(npm bin)/babel src/bin/ --out-dir=dist/bin --copy-files",
+    "build:lib": "BABEL_ENV=lib $(npm bin)/babel src/ --ignore=src/__mocks__ --out-dir=dist --source-maps",
+    "build:bin": "BABEL_ENV=cli $(npm bin)/babel src/bin/ --out-dir=dist/bin --copy-files --source-maps",
     "build": "rm -rf dist/ && npm run build:lib && npm run build:bin",
     "watch:src": "npm run build:lib -- --watch",
     "watch:bin": "npm run build:bin -- --watch",
