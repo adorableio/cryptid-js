@@ -185,9 +185,9 @@ export function updatePassword(passwords, callback) {
     headers: { Authorization: `Token token=${TOKEN}` },
     json: {
       user: {
-        current: currentPassword,
+        currentPassword: currentPassword,
         password: newPassword,
-        password_confirmation: newPasswordConfirm,
+        passwordConfirmation: newPasswordConfirm,
       }
     }
   };
