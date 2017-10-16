@@ -1,3 +1,4 @@
-import {LOGGER, loadVersion} from './cli';
+import {LOGGER} from './cli';
+import {loadVersion} from './help';
 
 LOGGER.info(loadVersion());

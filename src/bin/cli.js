@@ -5,9 +5,7 @@ import chalk from 'chalk';
 import createLogger from 'cli-logger';
 // eslint-disable-next-line no-unused-vars
 import fetch from 'isomorphic-fetch';
-import fs from 'fs';
 import md5 from 'md5';
-import path from 'path';
 import request from 'request';
 import url from 'url';
 
@@ -30,6 +28,16 @@ function loadSettings() {
       process.exit(1);
     }
   };
+  settings.clear = function() {
+    this.token = '';
+    this.email = '';
+    this.loggedIn = false;
+    delete this.checkLogin;
+  };
+  settings.setData = function(token, email) {
+    this.token = token;
+    this.email = email;
+  };
 
   return settings;
 }
@@ -51,21 +59,6 @@ function checkError(error) {
     }
     process.exit(1);
   }
-}
-
-/* =========================================================
- *
- *  Helper Functions
- *
- *  ========================================================= */
-
-export function loadHelp(filename) {
-  let helpFilePath = path.join(__dirname, 'help', `${filename}.txt`);
-  return fs.readFileSync(helpFilePath, 'utf8');
-}
-
-export function loadVersion() {
-  return require(path.join(__dirname, '../..', 'package.json')).version;
 }
 
 /* =========================================================
@@ -106,9 +99,8 @@ export function login(username, password) {
   request(options, (error, response, body) => {
 
     if (response.statusCode === 201) {
-      SETTINGS.token = body.data.token;
-      SETTINGS.email = username;
-      process.exit();
+      SETTINGS.setData(body.data.token, username)
+      process.exit(0);
     } else {
       LOGGER.info(chalk.red('Invalid password'));
       process.exit(1);
@@ -193,9 +185,9 @@ export function updatePassword(passwords, callback) {
     headers: { Authorization: `Token token=${TOKEN}` },
     json: {
       user: {
-        current: currentPassword,
+        currentPassword: currentPassword,
         password: newPassword,
-        password_confirmation: newPasswordConfirm,
+        passwordConfirmation: newPasswordConfirm,
       }
     }
   };

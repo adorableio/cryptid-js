@@ -1,4 +1,4 @@
-import {loadHelp} from './cli';
+import {loadHelp} from './help';
 import program from 'commander';
 
 program
