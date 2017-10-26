@@ -29,48 +29,54 @@ exports.handler = (argv) => {
   let queryDocument = '';
 
   if (argv.graphQl) {
-    queryDocument = fs.readFileSync(argv.graphQl, 'utf8');
+    try {
+      queryDocument = fs.readFileSync(argv.graphQl, 'utf8');
+    } catch (err) {
+      LOGGER.error(chalk.red(err.message));
+      process.exit(1);
+    }
   } else {
     queryDocument = `{ events(tracker_id: "${argv.trackerId}") { event_value } }`;
   }
 
-  const queryOpts = {
-    query: gql(queryDocument)
-  };
+  try {
+    client.query({query: gql(queryDocument)})
+      .catch(err => LOGGER.error(chalk.red(err)) && process.exit(1))
+      .then(resp => {
 
-  client.query(queryOpts)
-    .catch(err => LOGGER.error(chalk.red(err)) && process.exit(1))
-    .then(resp => {
+        switch (argv.format) {
+          case 'json':
+            LOGGER.info(JSON.stringify(resp.data));
+            break;
+          case 'csv':
+          default:
+            const opts = { header: true };
+            if (resp.data.events) {
+              const events = resp.data.events.map(event => {
+                // eslint-disable-next-line no-unused-vars
+                let { __typename, ...mappedEvent } = event;
+                return mappedEvent;
+              });
+              if (events.length > 0) {
+                csvify(events, opts, (err, output) => {
+                  LOGGER.info(output);
+                });
+              }
+            }
 
-      switch (argv.format) {
-        case 'json':
-          LOGGER.info(JSON.stringify(resp.data));
-          break;
-        case 'csv':
-        default:
-          const opts = { header: true };
-          if (resp.data.events) {
-            const events = resp.data.events.map(event => {
-              // eslint-disable-next-line no-unused-vars
-              let { __typename, ...mappedEvent } = event;
-              return mappedEvent;
-            });
-            if (events.length > 0) {
-              csvify(events, opts, (err, output) => {
+            const view = resp.data.view;
+            if (view) {
+              csvify(view.lines, opts, (err, output) => {
+                LOGGER.info(`Event Summary: ${view.name}`);
+                LOGGER.info('----------------------------------------------------');
                 LOGGER.info(output);
               });
             }
-          }
-
-          const view = resp.data.view;
-          if (view) {
-            csvify(view.lines, opts, (err, output) => {
-              LOGGER.info(`Event Summary: ${view.name}`);
-              LOGGER.info('----------------------------------------------------');
-              LOGGER.info(output);
-            });
-          }
-          break;
-      }
-    });
+            break;
+        }
+      });
+  } catch (err) {
+    LOGGER.error(chalk.red(err.message));
+    process.emit(1);
+  }
 };
