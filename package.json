@@ -51,7 +51,6 @@
     "apollo-client": "^1.9.3",
     "chalk": "^2.1.0",
     "cli-logger": "^0.5.40",
-    "commander": "^2.11.0",
     "csv-stringify": "^1.0.4",
     "easy-table": "^1.1.0",
     "graphql-tag": "^2.4.2",
@@ -62,7 +61,8 @@
     "preferences": "^0.2.1",
     "request": "^2.81.0",
     "reqwest": "^2.0.5",
-    "xhr2": "^0.1.4"
+    "xhr2": "^0.1.4",
+    "yargs": "^10.0.3"
   },
   "eslintConfig": {
     "extends": [

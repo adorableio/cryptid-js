@@ -99,7 +99,7 @@ export function login(username, password) {
   request(options, (error, response, body) => {
 
     if (response.statusCode === 201) {
-      SETTINGS.setData(body.data.token, username)
+      SETTINGS.setData(body.data.token, username);
       process.exit(0);
     } else {
       LOGGER.info(chalk.red('Invalid password'));

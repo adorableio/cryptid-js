@@ -1,17 +1,14 @@
-import {loadHelp, loadVersion} from './help';
+import {loadHelp} from './help';
 
-import program from 'commander';
+//   .command('products', 'Product actions')
+//   .command('properties', 'Property actions')
+//   .command('query', 'Query the event store for a property')
 
-program
-  .version(loadVersion())
-  .description(loadHelp('cryptid'))
-  .command('login', 'Login to Cryptid')
-  .command('logout', 'Logout of Cryptid')
-  .command('user', 'User actions')
-  .command('accounts', 'Account actions')
-  .command('products', 'Product actions')
-  .command('properties', 'Property actions')
-  .command('query', 'Query the event store for a property')
-  .command('server', 'Display the currently-configured server endpoint')
-  .command('version', 'Print version')
-  .parse(process.argv);
+// eslint-disable-next-line no-unused-expressions
+require('yargs')
+  .commandDir('commands')
+  .demandCommand()
+  .help()
+  .usage(loadHelp('cryptid'))
+  .version()
+  .argv;
