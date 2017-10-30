@@ -1,0 +1,3 @@
+cryptid query generate <tracker-id> <graphql-file> [--view] [--events]
+
+Generate a usable graphql query file based on a tracker id.

@@ -1,0 +1,9 @@
+cryptid query run <graphql-file> [-f (json|csv)]
+
+Executes the graphql query in the specified file against the currently
+configured server. Formats results as csv by default; use the -f, --format
+option to optionally return results as json.
+
+See http://graphql.org/ for information on how to get started writing GraphQL
+queries, or use cryptid query generate to create a starting queryfile based
+on a tracker id.
